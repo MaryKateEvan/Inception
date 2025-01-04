@@ -1,0 +1,47 @@
+INCEPTION
+
+Hypervisor: the software that controls the Virtual Machines, like Virtual Box.
+
+Docker is a program that manages the life cycles of containers, edit them, run them, interact with them..
+
+CONTAINERIZATION is the ability to create a lightweight environment where the processes can run on a host 
+operating system… they share all the same things in that OS but they can not touch anything outside of 
+their little bounded box.
+
+Docker will pull images that are already known form the Docker Hub. 
+For example if I do `docker run hello-world` docker replies in the terminal:
+“Unable to find image ‘hello-world:latest’ locally
+latest: Pulling form library/hello-world”
+
+THE MAIN RELATIONSHIP DIAGRAM:
+From a docker file.  ——docker build——>.   docker image.  —-docker run———>  container
+
+“While VMs simulate an entire machine, containers only contain an application.
+“A container is an application that has been packaged with all the files, configurations 
+and dependencies, necessary for it to run. “
+
+Main disadvantage for the VM:
+The containers share the underlying operating system between them. (While VMs can run 
+with any OS, regardless of the OS of the host computer.”
+… so if the operating system on that server crashes, all the containers will go down…
+
+DOCKER COMPOSE is a tool for creating a multi-container application, where services can 
+talk to one another easily and efficiently.
+Docker compose, by default, will use a .env file to load variables.
+
+Image name follows the pattern: `name:tag`
+
+`volumes`: here we give the name of the volume that we want mounted into this container 
+and then there is a colon and the path that this volume gets mounted to onto the container.
+So whenever the container saves some data, like in a database, it actually gets saved to 
+the volume we define here.
+
+
+
+The Docker engine includes the Docker daemon, which is a background process that manages 
+Docker containers, and the Docker client, which is a command-line tool that allows me to 
+interact with the Docker daemon.
+
+A Docker image is a lightweight, stand-alone, executable package that includes everything 
+needed to run a piece of software, including the application code, libraries, dependencies, 
+and runtime.
