@@ -45,3 +45,19 @@ interact with the Docker daemon.
 A Docker image is a lightweight, stand-alone, executable package that includes everything 
 needed to run a piece of software, including the application code, libraries, dependencies, 
 and runtime.
+
+A DOCKER COMPOSE file is a YAML file that defines how multiple Docker containers should be 
+set up and run. It allows you to define the services that make up your application, and then 
+start and stop all of the containers with a single command.
+
+Most-common dockers commands used:
+docker build: Used to build a Docker image from a Dockerfile.
+docker run: Used to run a Docker container based on a Docker image.
+docker pull: Used to pull a Docker image from a registry, such as Docker Hub.
+docker push: Used to push a Docker image to a registry.
+docker ps: Used to list the running Docker containers on a system.
+docker stop: Used to stop a running Docker container.
+docker rm: Used to remove a Docker container.
+docker rmi: Used to remove a Docker image.
+docker exec: Used to execute a command in a running Docker container.
+docker logs: Used to view the logs for a Docker container.
