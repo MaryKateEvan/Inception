@@ -31,7 +31,7 @@ else
 	# shuts down the MariaDB server after initialization
 	mysqladmin shutdown
 
-	# clean-up of the used script:
+	# clean-up of the used now, file we created above
 	rm -f /tmp/db_init.sql
 fi
 
