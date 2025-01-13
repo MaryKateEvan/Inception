@@ -6,25 +6,21 @@ RUN apt-get update -y && apt-get upgrade -y \
 	&& apt-get install -y mariadb-server \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# passes our modified configuration to the container
+COPY ./conf/db_config.cnf /etc/mysql/mariadb.conf.d/
 
-# # Step 1: Alpine Linux as the base image
-# FROM alpine:latest
+# passes our intialiazation script to the container
+COPY ./tools/db_script.sh /usr/local/bin/
+# (saving it in the /usr/local/bin/ makes the script available container-wide by just typing "script.sh")
 
-# # Step 2: Install MariaDB
-# RUN apk update && apk add --no-cache mariadb mariadb-client
+# gives execution permission to the script
+RUN chmod +x /usr/local/bin/db_script.sh
 
-# # Step 3: Create necessary directories and set permissions
-# RUN mkdir -p /var/lib/mysql /var/run/mysqld && \
-#     chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
+RUN mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql
 
-# # Step 4: Set up MariaDB data directory and initialize database
-# RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
-# # Step 5: Copy a custom MariaDB configuration file (optional)
-# COPY ./conf/50-server.cnf /etc/my.cnf
+# exposes the default MariaDB port 
+EXPOSE 3306
 
-# # Step 6: Expose MariaDB port (3306 is the default)
-# EXPOSE 3306
-
-# # Step 7: Set the entrypoint command to start MariaDB
-# CMD ["mysqld", "--datadir=/var/lib/mysql", "--user=mysql"]
+# specifies the script to be executed when the container starts
+ENTRYPOINT ["db_script.sh"]
