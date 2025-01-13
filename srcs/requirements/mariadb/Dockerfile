@@ -25,4 +25,4 @@ RUN mkdir -p /var/lib/mysql /var/run/mysqld && \
 EXPOSE 3306
 
 # specifies the script to be executed when the container starts
-ENTRYPOINT ["db_script.sh"]
+CMD ["db_script.sh"]
