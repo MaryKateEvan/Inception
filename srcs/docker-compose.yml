@@ -1,0 +1,12 @@
+# specifies the version of the docker-compose format:
+version: '3.8'
+
+# specifies that Docker should use the "bridge
+# network driver" for the `inception` network
+networks:
+  inception:
+    driver: bridge
+
+services:
+
+volumes:
