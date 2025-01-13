@@ -39,7 +39,7 @@ services:
     depends_on:
       - wordpress
     volumes:
-      - wp_files:/var/www/html:ro # shares the wp_files volume with WordPress (read-only) to serve files.
+      - wp_files:/var/www/html:ro # shares the wp_files volume with WordPress (read-only) to serve files
     restart: always
 
   wordpress:
@@ -72,4 +72,3 @@ services:
       - database:/var/lib/mysql # uses the database volume for persisting its database files
     restart: always
 
-volumes:
