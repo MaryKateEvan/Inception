@@ -35,7 +35,7 @@ else
 	rm -f /tmp/db_init.sql
 fi
 
+echo "\033[0;32mMariaDB is ready for use!\033[0m"
+
 # Starts the properly initialized MariaDB server
 exec mysqld_safe --user=mysql
-
-echo "\033[0;32mMariaDB is ready for use!\033[0m"
