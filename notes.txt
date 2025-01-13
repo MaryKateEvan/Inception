@@ -79,3 +79,6 @@ while the other two should only have the "expose" not "ports".
 	-	NGINX exposes port 80 internally so it can communicate with WordPress.
 	- 	WordPress exposes port 80 internally for communication with NGINX.
 	-	MariaDB exposes port 3306 internally for WordPress to communicate with the database.
+
+NAMED VOLUMES (which are used in my case) are managed by Docker and can persist 
+data independently of the container lifecycle.

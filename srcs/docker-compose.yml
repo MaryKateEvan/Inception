@@ -1,11 +1,26 @@
 # specifies the version of the docker-compose format:
 version: '3.8'
 
-# specifies that Docker should use the "bridge
-# network driver" for the `inception` network
+# specifies that Docker should use the default "bridge network driver"
 networks:
   inception:
     driver: bridge
+
+volumes:
+
+  database:
+    driver: local # stores data on the host machine
+    driver_opts:
+      device: /home/mevangel/data/database # where the volume's data will be stored
+      o: bind # uses a "bind mount" which links a specific directory/file on the host machine to the container
+      type: none # means no specific filesystem type is enforced
+
+  wp_files:
+    driver: local
+    driver_opts:
+      device: /home/mevangel/data/wp_files
+      o: bind
+      type: none
 
 services:
 
