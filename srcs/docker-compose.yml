@@ -9,4 +9,38 @@ networks:
 
 services:
 
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    build: ./requirements/mariadb
+    networks:
+      - inception
+    env_file: .env
+    restart: always
+    volumes:
+      - 
+
+
+  nginx:
+    container_name: nginx
+    image: nginx
+    build: ./requirements/nginx
+    networks:
+      - inception
+    env_file: .env
+    restart: always
+    volumes:
+      - 
+
+  wordpress:
+    container_name: wordpress
+    image: wordpress
+    build: ./requirements/wordpress
+    networks:
+      - inception
+    env_file: .env
+    restart: always
+    volumes:
+      - 
+
 volumes:
