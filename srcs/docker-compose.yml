@@ -9,38 +9,52 @@ networks:
 
 services:
 
-  mariadb:
-    container_name: mariadb
-    image: mariadb
-    build: ./requirements/mariadb
-    networks:
-      - inception
-    env_file: .env
-    restart: always
-    volumes:
-      - 
-
-
   nginx:
     container_name: nginx
     image: nginx
-    build: ./requirements/nginx
+    build:
+      context: ./requirements/nginx
+    env_file: .env
     networks:
       - inception
-    env_file: .env
-    restart: always
+    ports:
+      - "443:443" # exposes port 443 externally (HTTPS)
+    expose:
+      - "9000" # exposes port 9000 internally for communication with Wordpress
+    depends_on:
+      - wordpress
     volumes:
       - 
+    restart: always
 
   wordpress:
     container_name: wordpress
     image: wordpress
-    build: ./requirements/wordpress
+    build:
+      context: ./requirements/wordpress
+    env_file: .env
     networks:
       - inception
-    env_file: .env
-    restart: always
+    expose:
+      - "9000" # exposes port 9000 internally for communication with NGINX
+    depends_on:
+      - mariadb
     volumes:
       - 
+    restart: always
+
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    build:
+      context: ./requirements/mariadb
+    env_file: .env
+    networks:
+      - inception
+    expose:
+      - "3306" # exposes port 3306 internally for WordPress to communicate
+    volumes:
+      - 
+    restart: always
 
 volumes:

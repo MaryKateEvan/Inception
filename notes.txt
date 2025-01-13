@@ -61,3 +61,21 @@ docker rm: Used to remove a Docker container.
 docker rmi: Used to remove a Docker image.
 docker exec: Used to execute a command in a running Docker container.
 docker logs: Used to view the logs for a Docker container.
+
+
+Regarding the requirement of the subject: "Your NGINX container must be 
+the only entrypoint into your infrastructure via the port 443 only, using 
+the TLSv1.2 or TLSv1.3 protocol."
+----> in the docker-compose.yml, only the nginx service must have the ports section,
+while the other two should only have the "expose" not "ports".
+
+- NGINX should have the ports section to expose port 443 to the external 
+	world (host machine). This makes it the only entry point into your 
+	infrastructure, as required.
+- All three services (NGINX, WordPress, and MariaDB) should have the expose 
+	section to make specific ports available to other containers within the 
+	same Docker network. However, these ports will not be accessible 
+	externally (outside the Docker network).
+	-	NGINX exposes port 80 internally so it can communicate with WordPress.
+	- 	WordPress exposes port 80 internally for communication with NGINX.
+	-	MariaDB exposes port 3306 internally for WordPress to communicate with the database.
