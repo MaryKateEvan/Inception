@@ -80,5 +80,17 @@ while the other two should only have the "expose" not "ports".
 	- 	WordPress exposes port 80 internally for communication with NGINX.
 	-	MariaDB exposes port 3306 internally for WordPress to communicate with the database.
 
-NAMED VOLUMES (which are used in my case) are managed by Docker and can persist 
+NAMED VOLUMES are managed by Docker and can persist 
 data independently of the container lifecycle.
+
+What happens in the case of my volumes, for example for the database volume:
+1. 	All actions performed on `/var/lib/mysql` in the container are directly 
+	applied to `/home/mevangel/data/database` on the host.
+		- If the container writes a new file to `/var/lib/mysql`, that file 
+		  will immediately appear in `/home/mevangel/data/database`.
+		- If the container deletes a file from `/var/lib/mysql`, it is deleted
+		  from `/home/mevangel/data/database`.
+2. 	Files in `/home/mevangel/data/database` are accessible to the container
+	at `/var/lib/mysql`.
+		- When the container starts, any existing files in `/home/mevangel/data/
+		  database` will be visible at `/var/lib/mysql` inside the container.
