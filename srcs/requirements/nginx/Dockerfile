@@ -13,7 +13,7 @@ RUN mkdir -p /etc/nginx/ssl && \
 	-out /etc/nginx/ssl/nginx.crt \
 	-subj "/C=DE/ST=BW/L=HN/O=42Heilbronn/OU=student/CN=mevangel.42.fr"
 
-# ensures permissions and ownership for the web root directory (volume must be accesible)
+# ensures permissions and ownership for the web root directory (volume must be accesible by the `www-data` user and group of nginx)
 RUN chmod 755 /var/www/html && \
 	chown -R www-data:www-data /var/www/html
 
