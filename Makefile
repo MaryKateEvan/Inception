@@ -6,43 +6,52 @@ ENV				:=	--env-file $(SRC_DIR)/.env
 WP_VOLUME		:= /Users/mevangel/data/wp_files
 DB_VOLUME		:= /Users/mevangel/data/database
 
+# Color codes
+GREEN   := \033[32m
+YELLOW  := \033[33m
+RED     := \033[31m
+BLUE    := \033[34m
+CYAN    := \033[36m
+RESET   := \033[0m
+
 # Default target
 all: build up
 
 # Creates the volumes on the local drive
 create_volumes:
+	@echo "📂 ${CYAN}Creating volumes on the local drive...${RESET}"
 	@mkdir -p $(WP_VOLUME)
 	@mkdir -p $(DB_VOLUME)
 
 # Builds the services
 build: create_volumes
-	@echo "Building Docker images..."
+	@echo "🔨 ${GREEN}Building Docker images...${RESET}"
 	$(DCOMPOSE) -f $(DCOMPOSE_FILE) build
 
 # Starts the services
 up:
-	@echo "Starting services..."
+	@echo "🚀 ${YELLOW}Starting services...${RESET}"
 	$(DCOMPOSE) -f $(DCOMPOSE_FILE) up -d
 
 # Stops the services
 down:
-	@echo "Stopping services..."
+	@echo "🛑 ${RED}Stopping services...${RESET}"
 	$(DCOMPOSE) -f $(DCOMPOSE_FILE) down
 
 # Resumes the services
 start:
-	@echo "Resume services..."
+	@echo "⏯️ ${CYAN}Resuming services...${RESET}"
 	$(DCOMPOSE) -f $(DCOMPOSE_FILE) start
 
 # Deletes the volumes
 delete_volumes:
-	@echo "Deleting volumes..."
+	@echo "🗑️  ${RED}Deleting volumes...${RESET}"
 	@rm -rf $(WP_VOLUME)
 	@rm -rf $(DB_VOLUME)
 
 # Clean up docker resources (without removing volumes)
 clean: down
-	@echo "Cleaning up docker resources..."
+	@echo "🧹 ${YELLOW}Cleaning up Docker resources...${RESET}"
 	$(DCOMPOSE) -f $(DCOMPOSE_FILE) down --volumes --remove-orphans
 	docker container prune -f
 	docker network prune -f
@@ -50,15 +59,16 @@ clean: down
 
 # Complete clean-up, including volumes
 fclean: clean delete_volumes
-	@echo "Total clean-up, including volumes..."
+	@echo "🧹🧹 ${RED}Total clean-up, including volumes...${RESET}"
 	docker system prune -a -f
 
 # Rebuild everything from scratch
 re: fclean all
-	@echo "Rebuilding the project from scratch..."
+	@echo "🔁 ${BLUE}Rebuilding the project from scratch...${RESET}"
 
 # Print the status of the containers
 status:
+	@echo "📊 ${CYAN}Displaying container status...${RESET}"
 	docker ps
 
 .PHONY: all create_volumes build up down start delete_volumes clean fclean re status
