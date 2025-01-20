@@ -3,40 +3,38 @@ DCOMPOSE		:= docker-compose
 SRC_DIR			:= srcs
 DCOMPOSE_FILE	:= $(SRC_DIR)/docker-compose.yml
 ENV				:=	--env-file $(SRC_DIR)/.env
-WP_VOLUME		:= /home/mevangel/data/wp_files
-DB_VOLUME		:= /home/mevangel/data/database
-
-# Targets
-.PHONY: all build up down clean re
+WP_VOLUME		:= /Users/mevangel/data/wp_files
+DB_VOLUME		:= /Users/mevangel/data/database
 
 # Default target
 all: build up
 
+# Creates the volumes on the local drive
 create_volumes:
 	@mkdir -p $(WP_VOLUME)
 	@mkdir -p $(DB_VOLUME)
 
-# Build the services
+# Builds the services
 build: create_volumes
 	@echo "Building Docker images..."
 	$(DCOMPOSE) -f $(DCOMPOSE_FILE) build
 
-# Start the services
+# Starts the services
 up:
 	@echo "Starting services..."
 	$(DCOMPOSE) -f $(DCOMPOSE_FILE) up -d
 
-# Stop the services
+# Stops the services
 down:
 	@echo "Stopping services..."
 	$(DCOMPOSE) -f $(DCOMPOSE_FILE) down
 
-# Resume the services
+# Resumes the services
 start:
 	@echo "Resume services..."
 	$(DCOMPOSE) -f $(DCOMPOSE_FILE) start
 
-# Delete volumes created by the services
+# Deletes the volumes
 delete_volumes:
 	@echo "Deleting volumes..."
 	@rm -rf $(WP_VOLUME)
@@ -59,7 +57,8 @@ fclean: clean delete_volumes
 re: fclean all
 	@echo "Rebuilding the project from scratch..."
 
+# Print the status of the containers
 status:
 	docker ps
 
-.PHONY: all up down clean fclean re delete_volumes create_volumes start stop
+.PHONY: all create_volumes build up down start delete_volumes clean fclean re status
