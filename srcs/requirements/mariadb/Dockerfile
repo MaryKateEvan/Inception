@@ -10,11 +10,11 @@ RUN apt-get update -y && apt-get upgrade -y \
 COPY ./conf/db_config.cnf /etc/mysql/mariadb.conf.d/
 
 # passes our intialiazation script to the container
-COPY ./tools/db_script.sh /usr/local/bin/
+COPY ./tools/db_script.sh .
 # (saving it in the /usr/local/bin/ makes the script available container-wide by just typing "script.sh")
 
 # gives execution permission to the script
-RUN chmod +x /usr/local/bin/db_script.sh
+RUN chmod +x db_script.sh
 
 # prepares both directories' ownership to cover all MariaDB operational requirements
 # RUN mkdir -p /var/lib/mysql /var/run/mysqld && \
@@ -27,4 +27,4 @@ RUN chmod +x /usr/local/bin/db_script.sh
 EXPOSE 3306
 
 # specifies the script to be executed when the container starts
-CMD ["db_script.sh"]
+CMD ["./db_script.sh"]

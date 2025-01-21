@@ -10,6 +10,7 @@
 
 # this is only for the mysqld standalone daemon
 [mysqld]
+init_file = /etc/mysql/db_init.sql
 
 #
 # * Basic Settings
@@ -26,7 +27,7 @@ skip-external-locking
 
 # Instead of skip-networking the default is now to listen only on
 # localhost which is more compatible and is not less secure.
-bind-address		= 0.0.0.0
+bind-address		= mariadb
 
 #
 # * Fine Tuning
