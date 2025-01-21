@@ -1,5 +1,8 @@
 #!/bin/sh
 
+cd /var/www/html
+wp core download --allow-root
+
 # Check for required environment variables
 : "${WP_URL:?Environment variable WP_URL is required}"
 : "${DB_NAME:?Environment variable DB_NAME is required}"
@@ -67,6 +70,8 @@ wp option update siteurl "${WP_URL}" --allow-root || {
     echo "Error: Failed to update site URL"
     exit 1
 }
+
+chown -R www-data:www-data /var/www/html/*
 
 # Start PHP-FPM
 exec php-fpm7.4 -F

@@ -3,8 +3,8 @@ DCOMPOSE		:= docker-compose
 SRC_DIR			:= srcs
 DCOMPOSE_FILE	:= $(SRC_DIR)/docker-compose.yml
 ENV				:=	--env-file $(SRC_DIR)/.env
-WP_VOLUME		:= /Users/mevangel/data/wp_files
-DB_VOLUME		:= /Users/mevangel/data/database
+# WP_VOLUME		:= /Users/mevangel/goinfre/data/wp_files
+# DB_VOLUME		:= /Users/mevangel/goinfre/data/database
 
 # Color codes
 GREEN   := \033[32m
@@ -24,14 +24,14 @@ create_volumes:
 	@mkdir -p $(DB_VOLUME)
 
 # Builds the services
-build: create_volumes
+build: 
 	@echo "🔨 ${GREEN}Building Docker images...${RESET}"
 	$(DCOMPOSE) -f $(DCOMPOSE_FILE) build
 
 # Starts the services
 up:
 	@echo "🚀 ${YELLOW}Starting services...${RESET}"
-	$(DCOMPOSE) -f $(DCOMPOSE_FILE) up -d
+	$(DCOMPOSE) -f $(DCOMPOSE_FILE) up
 
 # Stops the services
 down:
