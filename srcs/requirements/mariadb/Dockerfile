@@ -27,4 +27,4 @@ RUN chmod +x db_script.sh
 EXPOSE 3306
 
 # specifies the script to be executed when the container starts
-CMD ["./db_script.sh"]
+CMD ["sh", "./db_script.sh"]
