@@ -4,20 +4,20 @@ version: '3.8'
 # specifies that Docker should use the default "bridge network driver"
 networks:
   inception:
+    name: inception
     driver: bridge
 
 volumes:
-  database:
+  database-volume:
     driver: local
     driver_opts:
-      device: /Users/mevangel/Documents/VSCodeFiles/projects/inception/volumes/database
+      device: /Users/mevangel/Documents/VSCodeFiles/projects/inception/srcs/volumes/database-volume
       o: bind
       type: none
-
-  wp_files:
+  wordpress-volume:
     driver: local
     driver_opts:
-      device: /Users/mevangel/Documents/VSCodeFiles/projects/inception/volumes/wp_files
+      device: /Users/mevangel/Documents/VSCodeFiles/projects/inception/srcs/volumes/wordpress-volume
       o: bind
       type: none
 
@@ -31,10 +31,10 @@ volumes:
 #       o: bind # uses a "bind mount" which links a specific directory/file on the host machine to the container
 #       type: none # means no specific filesystem type is enforced
 
-#   wp_files:
+#   wordpress-volume:
 #     driver: local
 #     driver_opts:
-#       device: /Users/mevangel/goinfre/data/wp_files
+#       device: /Users/mevangel/goinfre/data/wordpress-volume
 #       o: bind
 #       type: none
 
@@ -56,7 +56,7 @@ services:
     depends_on:
       - wordpress
     volumes:
-      - wp_files:/var/www/html:ro # shares the wp_files volume with WordPress (read-only) to serve files
+      - wordpress-volume:/var/www/html:ro # shares the wordpress-volume volume with WordPress (read-only) to serve files
     restart: always
 
   wordpress:
@@ -64,7 +64,8 @@ services:
     image: wordpress
     build:
       context: ./requirements/wordpress
-    env_file: .env
+    env_file:
+      - .env
     networks:
       - inception
     expose:
@@ -79,7 +80,7 @@ services:
     #   timeout: 10s
     #   retries: 5
     volumes:
-      - wp_files:/var/www/html # uses the wp_files volume to store its website files
+      - wordpress-volume:/var/www/html # uses the wordpress-volume volume to store its website files
     restart: always
 
   mariadb:
@@ -87,17 +88,18 @@ services:
     image: mariadb
     build:
       context: ./requirements/mariadb
-    env_file: .env
+    env_file:
+      - .env
     networks:
       - inception
     expose:
       - "3306" # exposes port 3306 internally for WordPress to communicate
-    # healthcheck:
-    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-    #   interval: 4s
-    #   timeout: 3s
-    #   retries: 5
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 4s
+      timeout: 3s
+      retries: 5
     volumes:
-      - database:/var/lib/mysql # uses the database volume for persisting its database files
+      - database-volume:/var/lib/mysql # uses the database volume for persisting its database files
     restart: always
 
