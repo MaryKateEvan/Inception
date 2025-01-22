@@ -45,7 +45,7 @@ start:
 	$(DOCKER_COMPOSE) start
 
 # Deletes the volumes
-delete_local_volumes:
+delete_volumes:
 	@echo "🗑️  ${RED}Deleting volumes...${RESET}"
 	@rm -rf $(WP_VOLUME)
 	@rm -rf $(DB_VOLUME)

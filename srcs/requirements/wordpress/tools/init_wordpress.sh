@@ -3,6 +3,10 @@
 cd /var/www/html
 wp core download --allow-root
 
+chown -R www-data:www-data /var/www/
+chown www-data:www-data /var/log/
+chown -R www-data:www-data /run/php
+
 # Check for required environment variables
 : "${WP_URL:?Environment variable WP_URL is required}"
 : "${DB_NAME:?Environment variable DB_NAME is required}"
