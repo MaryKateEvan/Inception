@@ -50,6 +50,7 @@ delete_volumes:
 # Clean up docker resources (without removing volumes)
 clean: down
 	@echo "🧹 ${YELLOW}Cleaning up Docker resources...${RESET}"
+	$(DOCKER_COMPOSE) down --volumes
 	docker container prune -f
 	docker network prune -f
 	docker image prune -f
@@ -61,7 +62,7 @@ fclean: clean
 
 # Rebuild and rerun
 re: fclean all
-	@echo "🔁 ${BLUE}Relaunching everything again...${RESET}"
+	@echo "🔁 ${GREEN}Everything is relaunched successfully! 🚀${RESET}"
 
 # Print the status of the containers
 status:
