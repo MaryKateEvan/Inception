@@ -17,11 +17,9 @@ COPY ./tools/db_script.sh .
 RUN chmod +x db_script.sh
 
 # prepares both directories' ownership to cover all MariaDB operational requirements
-# RUN mkdir -p /var/lib/mysql /var/run/mysqld && \
-# 	chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
+RUN mkdir -p /var/lib/mysql /var/run/mysqld && \
+	chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
 # (the `var/lib/mysql` is for data storage and the `var/run/mysqld` is for runtime files)
-
-# RUN chmod +x /usr/bin/mysqld_safe
 
 # exposes the default MariaDB port 
 EXPOSE 3306
