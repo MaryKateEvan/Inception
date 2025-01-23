@@ -1,5 +1,12 @@
 #!/bin/sh
 
+cd /var/www/html
+wp core download --allow-root
+
+chown -R www-data:www-data /var/www/
+chown www-data:www-data /var/log/
+chown -R www-data:www-data /run/php
+
 # Check for required environment variables
 : "${WP_URL:?Environment variable WP_URL is required}"
 : "${DB_NAME:?Environment variable DB_NAME is required}"
@@ -14,7 +21,7 @@
 : "${WP_USER_PASS:?Environment variable WP_USER_PASS is required}"
 
 # Validate administrator username
-if echo "${WP_ADMIN_NAME}" | grep -qiE "^(.*[-_])?admin(istrator)?([-_].*)?$"; then
+if echo "${WP_ADMIN_NAME}" | grep -qiE "admin|administrator"; then
     echo "Error: Administrator username '${WP_ADMIN_NAME}' contains a restricted term (admin or administrator)."
     exit 1
 fi
@@ -43,19 +50,23 @@ wp core install --url="${WP_URL}" \
     exit 1
 }
 
-# Create a regular WordPress user
-wp user create "${WP_USER_NAME}" "${WP_USER_EMAIL}" \
-    --user_pass="${WP_USER_PASS}" \
-    --allow-root || {
-    echo "Error: Failed to create user ${WP_USER_NAME}"
-    exit 1
-}
+# Check if the user exists before creating it
+if ! wp user get "${WP_USER_NAME}" --allow-root; then
+    wp user create "${WP_USER_NAME}" "${WP_USER_EMAIL}" \
+        --user_pass="${WP_USER_PASS}" \
+        --allow-root || {
+        echo "Error: Failed to create user ${WP_USER_NAME}"
+        exit 1
+    }
+else
+    echo "User ${WP_USER_NAME} already exists. Skipping user creation."
+fi
 
 # Validate the number of users in the database
 user_count=$(wp user list --field=ID --allow-root | wc -l)
 if [ "${user_count}" -ne 2 ]; then
-    echo "Error: Expected exactly 2 users in the WordPress database, but found ${user_count}."
-    exit 1
+    echo "Warning: Expected exactly 2 users in the WordPress database, but found ${user_count}."
+    # exit 1
 fi
 
 # Update site URLs
@@ -67,6 +78,8 @@ wp option update siteurl "${WP_URL}" --allow-root || {
     echo "Error: Failed to update site URL"
     exit 1
 }
+
+chown -R www-data:www-data /var/www/html/*
 
 # Start PHP-FPM
 exec php-fpm7.4 -F

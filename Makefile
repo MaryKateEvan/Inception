@@ -1,10 +1,8 @@
 # Variables
-DCOMPOSE		:= docker-compose
 SRC_DIR			:= srcs
-DCOMPOSE_FILE	:= $(SRC_DIR)/docker-compose.yml
-ENV				:=	--env-file $(SRC_DIR)/.env
-WP_VOLUME		:= /Users/mevangel/data/wp_files
-DB_VOLUME		:= /Users/mevangel/data/database
+DOCKER_COMPOSE	:= docker compose -f $(SRC_DIR)/docker-compose.yml
+WP_VOLUME		:= $(SRC_DIR)/volumes/wordpress-volume
+DB_VOLUME		:= $(SRC_DIR)/volumes/database-volume
 
 # Color codes
 GREEN   := \033[32m
@@ -15,7 +13,7 @@ CYAN    := \033[36m
 RESET   := \033[0m
 
 # Default target
-all: build up
+all: up
 
 # Creates the volumes on the local drive
 create_volumes:
@@ -26,22 +24,22 @@ create_volumes:
 # Builds the services
 build: create_volumes
 	@echo "🔨 ${GREEN}Building Docker images...${RESET}"
-	$(DCOMPOSE) -f $(DCOMPOSE_FILE) build
+	$(DOCKER_COMPOSE) build
 
 # Starts the services
-up:
+up: create_volumes
 	@echo "🚀 ${YELLOW}Starting services...${RESET}"
-	$(DCOMPOSE) -f $(DCOMPOSE_FILE) up -d
+	$(DOCKER_COMPOSE) up --build -d
 
 # Stops the services
 down:
 	@echo "🛑 ${RED}Stopping services...${RESET}"
-	$(DCOMPOSE) -f $(DCOMPOSE_FILE) down
+	$(DOCKER_COMPOSE) down
 
 # Resumes the services
 start:
 	@echo "⏯️ ${CYAN}Resuming services...${RESET}"
-	$(DCOMPOSE) -f $(DCOMPOSE_FILE) start
+	$(DOCKER_COMPOSE) start
 
 # Deletes the volumes
 delete_volumes:
@@ -52,19 +50,19 @@ delete_volumes:
 # Clean up docker resources (without removing volumes)
 clean: down
 	@echo "🧹 ${YELLOW}Cleaning up Docker resources...${RESET}"
-	$(DCOMPOSE) -f $(DCOMPOSE_FILE) down --volumes --remove-orphans
+	$(DOCKER_COMPOSE) down --volumes
 	docker container prune -f
 	docker network prune -f
 	docker image prune -f
 
 # Complete clean-up, including volumes
-fclean: clean delete_volumes
+fclean: clean
 	@echo "🧹🧹 ${RED}Total clean-up, including volumes...${RESET}"
-	docker system prune -a -f
+	docker system prune -a -f --volumes
 
-# Rebuild everything from scratch
+# Rebuild and rerun
 re: fclean all
-	@echo "🔁 ${BLUE}Rebuilding the project from scratch...${RESET}"
+	@echo "🔁 ${GREEN}Everything is relaunched successfully! 🚀${RESET}"
 
 # Print the status of the containers
 status:

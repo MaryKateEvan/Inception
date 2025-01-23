@@ -4,21 +4,20 @@ version: '3.8'
 # specifies that Docker should use the default "bridge network driver"
 networks:
   inception:
+    name: inception
     driver: bridge
 
 volumes:
-
-  database:
+  database-volume:
     driver: local # stores data on the host machine
     driver_opts:
-      device: /home/mevangel/data/database # where the volume's data will be stored
+      device: /Users/mevangel/Documents/VSCodeFiles/projects/inception/srcs/volumes/database-volume # where the volume's data will be stored
       o: bind # uses a "bind mount" which links a specific directory/file on the host machine to the container
       type: none # means no specific filesystem type is enforced
-
-  wp_files:
+  wordpress-volume:
     driver: local
     driver_opts:
-      device: /home/mevangel/data/wp_files
+      device: /Users/mevangel/Documents/VSCodeFiles/projects/inception/srcs/volumes/wordpress-volume
       o: bind
       type: none
 
@@ -29,7 +28,8 @@ services:
     image: nginx
     build:
       context: ./requirements/nginx
-    env_file: .env
+    env_file:
+      - .env
     networks:
       - inception
     ports:
@@ -39,7 +39,7 @@ services:
     depends_on:
       - wordpress
     volumes:
-      - wp_files:/var/www/html:ro # shares the wp_files volume with WordPress (read-only) to serve files
+      - wordpress-volume:/var/www/html:ro # shares the wordpress-volume with WordPress (read-only) to serve files
     restart: always
 
   wordpress:
@@ -47,15 +47,22 @@ services:
     image: wordpress
     build:
       context: ./requirements/wordpress
-    env_file: .env
+    env_file:
+      - .env
     networks:
       - inception
     expose:
       - "9000" # exposes port 9000 internally for communication with NGINX
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wp", "core", "is-installed", "--path=/var/www/html"]
+      interval: 8s
+      timeout: 4s
+      retries: 5
     volumes:
-      - wp_files:/var/www/html # uses the wp_files volume to store its website files
+      - wordpress-volume:/var/www/html # uses the wordpress-volume volume to store its website files
     restart: always
 
   mariadb:
@@ -63,12 +70,18 @@ services:
     image: mariadb
     build:
       context: ./requirements/mariadb
-    env_file: .env
+    env_file:
+      - .env
     networks:
       - inception
     expose:
       - "3306" # exposes port 3306 internally for WordPress to communicate
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 8s
+      timeout: 4s
+      retries: 5
     volumes:
-      - database:/var/lib/mysql # uses the database volume for persisting its database files
+      - database-volume:/var/lib/mysql # uses the database volume for persisting its database files
     restart: always
 

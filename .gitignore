@@ -1,3 +1,8 @@
 .dist
 */.env
 */*/*/*/index.php
+
+volumes
+srcs/old_one.yml
+with_changes.yml
+
