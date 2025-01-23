@@ -1,9 +1,6 @@
 # Variables
-# DCOMPOSE		:= docker compose
 SRC_DIR			:= srcs
-# DCOMPOSE_FILE	:= $(SRC_DIR)/docker-compose.yml
 DOCKER_COMPOSE	:= docker compose -f $(SRC_DIR)/docker-compose.yml
-# ENV				:=	--env-file $(SRC_DIR)/.env
 WP_VOLUME		:= $(SRC_DIR)/volumes/wordpress-volume
 DB_VOLUME		:= $(SRC_DIR)/volumes/database-volume
 
