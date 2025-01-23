@@ -21,7 +21,7 @@ chown -R www-data:www-data /run/php
 : "${WP_USER_PASS:?Environment variable WP_USER_PASS is required}"
 
 # Validate administrator username
-if echo "${WP_ADMIN_NAME}" | grep -qiE "^(.*[-_])?admin(istrator)?([-_].*)?$"; then
+if echo "${WP_ADMIN_NAME}" | grep -qiE "admin|administrator"; then
     echo "Error: Administrator username '${WP_ADMIN_NAME}' contains a restricted term (admin or administrator)."
     exit 1
 fi
