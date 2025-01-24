@@ -1,6 +1,7 @@
 # Variables
 SRC_DIR			:= srcs
 DOCKER_COMPOSE	:= docker compose -f $(SRC_DIR)/docker-compose.yml
+# volumes' directories with which I was testing on the MAC (in VM they must be in /home/intraname/)
 WP_VOLUME		:= $(SRC_DIR)/volumes/wordpress-volume
 DB_VOLUME		:= $(SRC_DIR)/volumes/database-volume
 
