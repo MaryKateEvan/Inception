@@ -1,8 +1,8 @@
 # Variables
 SRC_DIR			:= srcs
 DOCKER_COMPOSE	:= docker compose -f $(SRC_DIR)/docker-compose.yml
-WP_VOLUME		:= $(SRC_DIR)/volumes/wordpress-volume
-DB_VOLUME		:= $(SRC_DIR)/volumes/database-volume
+WP_VOLUME		:= /home/mevangel/data/wordpress-volume
+DB_VOLUME		:= /home/mevangel/data/database-volume
 
 # Color codes
 GREEN   := \033[32m
