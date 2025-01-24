@@ -77,7 +77,7 @@ services:
     expose:
       - "3306" # exposes port 3306 internally for WordPress to communicate
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "mevangel.42.fr"]
       interval: 8s
       timeout: 4s
       retries: 5
